@@ -1,12 +1,8 @@
-'''
-    rekomendasi untuk menginstall pillow
-    dengan cara "conda install pillow"
-'''
 import cv2
 import numpy as np
 import scipy
 from scipy.misc import imread
-import _pickle as pickle 
+import pickle
 import random
 import os
 import matplotlib.pyplot as plt
@@ -46,13 +42,13 @@ def batch_extractor(images_path, pickled_db_path="features.pck"):
 
     result = {}
     for f in files:
-        print ('Extracting features from image %s') % f
+        print ('Extracting features from image %s' % f)
         name = f.split('/')[-1].lower()
         result[name] = extract_features(f)
     
     # saving all our feature vectors in pickled file
-    with open(pickled_db_path, 'w') as fp:
-        pickle.dump(result, fp)
+    fp = open('pickled_db_path', 'wb')
+    pickle.dump(result, fp)
 
 class Matcher(object):
 
@@ -81,30 +77,6 @@ class Matcher(object):
 
         return nearest_img_paths, img_distances[nearest_ids].tolist()
 
-class Matcher(object):
-
-    def __init__(self):
-        self.names = []
-        self.matrix = []
-        for k, v in self.data.iteritems():
-            self.names.append(k)
-            self.matrix.append(v)
-        self.matrix = np.array(self.matrix)
-        self.names = np.array(self.names)
-
-    def cos_cdist(self, vector):
-        # getting cosine distance between search image and images database
-        v = vector.reshape(1, -1)
-        return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
-
-    def match(self, image_path, topn=5):
-        features = extract_features(image_path)
-        img_distances = self.cos_cdist(features)
-        # getting top 5 records
-        nearest_ids = np.argsort(img_distances)[:topn].tolist()
-        nearest_img_paths = self.names[nearest_ids].tolist()
-
-        return nearest_img_paths, img_distances[nearest_ids].tolist()
 
 def show_img(path):
     img = imread(path, mode="RGB")
@@ -130,6 +102,6 @@ def run():
         for i in range(3):
             # we got cosine distance, less cosine distance between vectors
             # more they similar, thus we subtruct it from 1 to get match value
-            print ('Match %s') % (1-match[i])
+            print ('Match %s' % (1-match[i]))
             show_img(os.path.join(images_path, names[i]))
 run()
