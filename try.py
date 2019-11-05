@@ -66,7 +66,16 @@ class Matcher(object):
     def euclidean_cdist(self, vector):
         # getting cosine distance between search image and images database
         v = vector.reshape(1, -1)
-        return scipy.spatial.distance.cdist(self.matrix, v).reshape(-1)
+        temp = [[0 for x in range(2048)] for y in range (18)]
+        result = [0 for x in range(18)]
+        for i in range(18):
+            for j in range (2048):
+                temp[i][j] = pow((temp[i][j] - v[0][j]),2)
+                result[i] += temp[i][j]
+            result[i] = pow(result[i], 0.5)
+        return result 
+
+        
             
     def cos_cdist(self, vector):
         # getting cosine distance between search image and images database
@@ -80,17 +89,12 @@ class Matcher(object):
         
         for e in img_distances_cos:
             e = math.sin(e)
-        img_distances = np.add(img_distances_cos,img_distances_euclidean)
-        for e in img_distances:
-            e = e/2
-        print(img_distances_cos)
-        print(img_distances_euclidean)
-        print(img_distances)
+
         # getting top 5 records
-        nearest_ids = np.argsort(img_distances)[:topn].tolist()
+        nearest_ids = np.argsort(img_distances_cos)[:topn].tolist()
         nearest_img_paths = self.names[nearest_ids].tolist()
 
-        return nearest_img_paths, img_distances[nearest_ids].tolist()
+        return nearest_img_paths, img_distances_cos[nearest_ids].tolist()
 
 
 def show_img(path):
@@ -117,6 +121,6 @@ def run():
         for i in range(3):
             # we got cosine distance, less cosine distance between vectors
             # more they similar, thus we subtruct it from 1 to get match value
-            print ('Match %s' % (1-match[i]))
+            print ('Match ' + str(match[i]))
             show_img(os.path.join(images_path, names[i]))
 run()
