@@ -6,8 +6,8 @@ import pickle
 import random
 import os
 import matplotlib.pyplot as plt
-import pandas as pd
 from pathlib import Path
+import math
 
 # Feature extractor
 def extract_features(image_path, vector_size=32):
@@ -63,31 +63,29 @@ class Matcher(object):
             self.matrix.append(v)
         self.matrix = np.array(self.matrix)
         self.names = np.array(self.names)
-    def lineardist(self, vector):
+    def euclidean_cdist(self, vector):
+        # getting cosine distance between search image and images database
         v = vector.reshape(1, -1)
-        result = 0
-        for v1 in self.matrix():
-            for v2 in v:
-                result += (v1-v2)**2
-        return result
+        return scipy.spatial.distance.cdist(self.matrix, v).reshape(-1)
             
     def cos_cdist(self, vector):
         # getting cosine distance between search image and images database
         v = vector.reshape(1, -1)
-        value1 = 0
-        value2 = 0
-        dotproduct = 0
-        for v1 in self.matrix():
-            value1 += v1**2
-        for v2 in v:
-            value2 += v2**2
-        for v1 in self.matrix():
-            for v2 in v:
-                dotproduct += v1*v2
-        return dotproduct 
+        return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
     def match(self, image_path, topn=5):
         features = extract_features(image_path)
-        img_distances = self.cos_cdist(features)
+        img_distances_cos = self.cos_cdist(features)
+        img_distances_euclidean = self.euclidean_cdist(features)
+        
+        
+        for e in img_distances_cos:
+            e = math.sin(e)
+        img_distances = np.add(img_distances_cos,img_distances_euclidean)
+        for e in img_distances:
+            e = e/2
+        print(img_distances_cos)
+        print(img_distances_euclidean)
+        print(img_distances)
         # getting top 5 records
         nearest_ids = np.argsort(img_distances)[:topn].tolist()
         nearest_img_paths = self.names[nearest_ids].tolist()
