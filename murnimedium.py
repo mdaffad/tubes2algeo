@@ -84,7 +84,8 @@ def show_img(path):
     plt.show()
     
 def run():
-    images_path = '/home/aufa/Downloads/Try/'
+    current = os.getcwd()
+    images_path = os.path.join(current,"resources/images")
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
     # getting 3 random images 
     sample = random.sample(files, 1)

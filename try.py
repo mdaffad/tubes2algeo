@@ -6,6 +6,7 @@ import pickle
 import random
 import os
 import matplotlib.pyplot as plt
+import pandas as pd
 from pathlib import Path
 
 # Feature extractor
@@ -53,11 +54,11 @@ def batch_extractor(images_path, pickled_db_path="features.pck"):
 class Matcher(object):
 
     def __init__(self, pickled_db_path="features.pck"):
-        with open(pickled_db_path) as fp:
+        with open(pickled_db_path,'rb') as fp:
             self.data = pickle.load(fp)
         self.names = []
         self.matrix = []
-        for k, v in self.data.iteritems():
+        for k, v in self.data.items():
             self.names.append(k)
             self.matrix.append(v)
         self.matrix = np.array(self.matrix)
