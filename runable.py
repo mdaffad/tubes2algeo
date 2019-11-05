@@ -77,7 +77,35 @@ class Matcher(object):
     #     v = vector.reshape(1, -1)
     #     return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
 
+    def cos_cdist(self, vector):
+        countPic = self.names.size
+        # print(countPic)
 
+        v = vector.reshape(1, -1)
+        print(v[0][0])
+        # print(v[0])
+        
+        EuclideanData = []
+
+        print(countPic)
+
+
+        for i in range(countPic-1) :
+            dotProduct = 0.0;
+            for j in range(2048) :
+                dotProduct += (self.matrix[i][j]*v[0][j])
+            
+
+            sumVectorW = 0;
+            for j in range(2048) :
+                sumVectorW += math.pow((self.matrix[i][j]),2)
+            sumVectorW = math.sqrt(sumVectorW)
+            sumVectorV
+            for j in range(2048) :
+                sumVectorV += math.pow(v[0][j],2)
+            sumVectorV = math.sqrt(sumVectorV)
+
+        return np.array(EuclideanData)
     def EuclideanDistances(self, vector):
         countPic = self.names.size
         # print(countPic)
