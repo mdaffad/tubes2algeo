@@ -89,6 +89,9 @@ class Matcher(object):
 
         print(countPic)
 
+        for j in range(2048) :
+            sumVectorV += math.pow(v[0][j],2)
+        sumVectorV = math.sqrt(sumVectorV)
 
         for i in range(countPic-1) :
             dotProduct = 0.0;
@@ -101,10 +104,9 @@ class Matcher(object):
                 sumVectorW += math.pow((self.matrix[i][j]),2)
             sumVectorW = math.sqrt(sumVectorW)
             sumVectorV
-            for j in range(2048) :
-                sumVectorV += math.pow(v[0][j],2)
-            sumVectorV = math.sqrt(sumVectorV)
-
+            
+            result = dotProduct/sumVectorV/sumVectorW
+            EuclideanData.append(result)                
         return np.array(EuclideanData)
     def EuclideanDistances(self, vector):
         countPic = self.names.size
