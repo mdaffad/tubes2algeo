@@ -77,6 +77,11 @@ class Matcher(object):
     #     v = vector.reshape(1, -1)
     #     return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
 
+    # def cos_cdist(self, vector):
+    #     # getting cosine distance between search image and images database
+    #     v = vector.reshape(1, -1)
+    #     return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
+
     def cos_cdist(self, vector):
         countPic = self.names.size
         # print(countPic)
@@ -89,6 +94,7 @@ class Matcher(object):
 
         print(countPic)
 
+        sumVectorV = 0    
         for j in range(2048) :
             sumVectorV += math.pow(v[0][j],2)
         sumVectorV = math.sqrt(sumVectorV)
@@ -103,10 +109,12 @@ class Matcher(object):
             for j in range(2048) :
                 sumVectorW += math.pow((self.matrix[i][j]),2)
             sumVectorW = math.sqrt(sumVectorW)
-            sumVectorV
+
             
-            result = dotProduct/sumVectorV/sumVectorW
-            EuclideanData.append(result)                
+            result = dotProduct/(sumVectorV*sumVectorW)
+            EuclideanData.append(1-result)  
+
+
         return np.array(EuclideanData)
     def EuclideanDistances(self, vector):
         countPic = self.names.size
@@ -130,7 +138,7 @@ class Matcher(object):
 
     def match(self, image_path, topn=5):
         features = ImageExtract(image_path)
-        img_distances = self.EuclideanDistances(features)
+        img_distances = self.cos_cdist(features)
         print(img_distances)
         # getting top 5 records
         nearest_ids = np.argsort(img_distances)[:topn].tolist()
@@ -166,6 +174,6 @@ def run():
     for i in range(3):
         # we got cosine distance, less cosine distance between vectors
         # more they similar, thus we subtruct it from 1 to get match value
-        print ('Match %s' %(match[i]))
+        print ('Match %s' %(1-match[i]))
         show_img(os.path.join(images_path, names[i]))
 run()
