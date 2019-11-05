@@ -63,12 +63,28 @@ class Matcher(object):
             self.matrix.append(v)
         self.matrix = np.array(self.matrix)
         self.names = np.array(self.names)
-
+    def lineardist(self, vector):
+        v = vector.reshape(1, -1)
+        result = 0
+        for v1 in self.matrix():
+            for v2 in v:
+                result += (v1-v2)**2
+        return result
+            
     def cos_cdist(self, vector):
         # getting cosine distance between search image and images database
         v = vector.reshape(1, -1)
-        return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
-
+        value1 = 0
+        value2 = 0
+        dotproduct = 0
+        for v1 in self.matrix():
+            value1 += v1**2
+        for v2 in v:
+            value2 += v2**2
+        for v1 in self.matrix():
+            for v2 in v:
+                dotproduct += v1*v2
+        return dotproduct 
     def match(self, image_path, topn=5):
         features = extract_features(image_path)
         img_distances = self.cos_cdist(features)
