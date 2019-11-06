@@ -66,14 +66,18 @@ class Matcher(object):
     def euclidean_cdist(self, vector):
         # getting cosine distance between search image and images database
         v = vector.reshape(1, -1)
-        temp = [[0 for x in range(2048)] for y in range (18)]
+        
         result = [0 for x in range(18)]
         for i in range(18):
+            temp = [0 for x in range(2048)]
             for j in range (2048):
-                temp[i][j] = pow((temp[i][j] - v[0][j]),2)
-                result[i] += temp[i][j]
+                temp[j] = pow((temp[j] - v[0][j]),2)
+                print(temp[j], v[0][j])
+                result[i] += temp[j]
+            print(result[i])
             result[i] = pow(result[i], 0.5)
-        return result 
+            
+        return np.array(result) 
 
         
             
@@ -90,11 +94,12 @@ class Matcher(object):
         for e in img_distances_cos:
             e = math.sin(e)
 
+        print(img_distances_euclidean)
         # getting top 5 records
-        nearest_ids = np.argsort(img_distances_cos)[:topn].tolist()
+        nearest_ids = np.argsort(img_distances_euclidean)[:topn].tolist()
         nearest_img_paths = self.names[nearest_ids].tolist()
 
-        return nearest_img_paths, img_distances_cos[nearest_ids].tolist()
+        return nearest_img_paths, img_distances_euclidean[nearest_ids].tolist()
 
 
 def show_img(path):
@@ -112,7 +117,7 @@ def run():
     batch_extractor(images_path)
 
     ma = Matcher('features.pck')
-    
+        
     for s in sample:
         print ('Query image ==========================================')
         show_img(s)
