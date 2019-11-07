@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-import scipy # not used
-import scipy.spatial # not used
 import imageio
 import pickle
 import random
@@ -148,38 +146,28 @@ class Matcher(object):
 
         return nearest_img_paths, img_distances[nearest_ids].tolist()
 
-# def show_img(path):
-#     img = imageio.imread(path, pilmode="RGB")
-#     plt.imshow(img)
-#     plt.show()
-    
-def run(option, address, top):
-    # images_path = input("Input Directory Files : ")
 
-    images_path = '/home/aufa/Downloads/Try/'
+    
+def run(option, address, top, images_path):
     
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
-    
-    # searchingPic = input("Input Directory Picture : ")
     
     BatchExtractor(images_path)
 
     ma = Matcher('features.pck')
-
-    # EuclideanDistances('features.pck')
     
     # print ('Query image ==========================================')
-    # newrunable.show_img(address)
     names, match = ma.match(address, top, option)
     # print ('Result images ========================================')
     result = []
     
     for i in range(top):
-        # we got cosine distance, less cosine distance between vectors
-        # more they similar, thus we subtruct it from 1 to get match value
-        print ('Match %s' %(1-match[i]))
+        if(option):
+            print ('Match %s' %(match[i]))
+        else :
+            print ('Match %s' %(1-match[i]))
         result.append(os.path.join(images_path, names[i]))
-
+    print(result)
     return np.array(result)
 
     
