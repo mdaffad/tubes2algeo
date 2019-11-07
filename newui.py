@@ -87,7 +87,7 @@ def Next():
 
 
 #Set Latar
-background = Image.open('/home/aufa/Desktop/Fix/Layout.jpg')
+background = Image.open('Layout.jpg')
 imageX = ImageTk.PhotoImage(background)
 labelX = Label(window, image=imageX)
 labelX.image = imageX
