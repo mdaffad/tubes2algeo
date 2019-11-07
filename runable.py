@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-import scipy
-import scipy.spatial
+import scipy # not used
+import scipy.spatial # not used
 import imageio
 import pickle
 import random

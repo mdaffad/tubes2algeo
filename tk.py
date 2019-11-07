@@ -46,8 +46,8 @@ class MainWindow(tk.Tk):
         label2.place(x=320, y=55)
 
     def Directory():
-		filename = filedialog.askopenfilename(title='Choose Picture')
-		return filename
+        filename = filedialog.askopenfilename(title='Choose Picture')
+        return filename
 	
 
 
@@ -70,7 +70,11 @@ class MainWindow(tk.Tk):
     #         self.tasks.append(new_task)
 
     #     self.task_create.delete(1.0, tk.END)
-
+    def entry():
+        E1 = Entry(self, text ="Input Top Match Number", bd =5)
+        E1.pack(side = RIGHT)
+        return E1.get()
+    
 if __name__ == "__main__":
     window = MainWindow()
     window.mainloop()
