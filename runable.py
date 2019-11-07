@@ -90,7 +90,7 @@ class Matcher(object):
         print(v[0][0])
         # print(v[0])
         
-        EuclideanData = []
+        CosineData = []
 
         print(countPic)
 
@@ -112,10 +112,10 @@ class Matcher(object):
 
             
             result = dotProduct/(sumVectorV*sumVectorW)
-            EuclideanData.append(1-result)  
+            CosineData.append(1-result)  
 
 
-        return np.array(EuclideanData)
+        return np.array(CosineData)
     def EuclideanDistances(self, vector):
         countPic = self.names.size
         # print(countPic)
